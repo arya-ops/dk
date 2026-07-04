@@ -10,7 +10,9 @@ let slideshow;
 startBtn.addEventListener("click", () => {
 
     // Play music
-    music.play();
+    music.play().catch(error => {
+    console.log("Music couldn't play:", error);
+});
 
     // Open first page
     pages[0].classList.remove("active");
