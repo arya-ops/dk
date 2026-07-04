@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const music = document.getElementById("bgMusic");
 
     let currentPage = 0;
-    let slideshow;
-    let hearts;
+    let slideshow = null;
+    let heartInterval = null;
     let started = false;
 
     function showPage(index) {
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (currentPage >= pages.length - 1) {
             clearInterval(slideshow);
-            clearInterval(hearts);
+            clearInterval(heartInterval);
             return;
         }
 
@@ -26,71 +26,49 @@ document.addEventListener("DOMContentLoaded", () => {
         showPage(currentPage);
     }
 
-    function createHeart() {
+    function createHearts() {
 
-        const heart = document.createElement("div");
-        heart.className = "heart";
+        heartInterval = setInterval(() => {
 
-        const emojis = ["🤍", "🤎", "💕", "💖", "🌸", "✨"];
+            const heart = document.createElement("div");
+            heart.className = "heart";
 
-        heart.textContent =
-            emojis[Math.floor(Math.random() * emojis.length)];
+            const emojis = ["🤍","🤎","💕","💖","🌸","✨"];
 
-        heart.style.left = `${Math.random() * 100}vw`;
-        heart.style.fontSize = `${18 + Math.random() * 18}px`;
+            heart.textContent =
+                emojis[Math.floor(Math.random()*emojis.length)];
 
-        document.body.appendChild(heart);
+            heart.style.left = Math.random()*100 + "vw";
+            heart.style.fontSize = (18 + Math.random()*18) + "px";
 
-        setTimeout(() => heart.remove(), 6000);
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            },6000);
+
+        },400);
+
     }
 
     startBtn.addEventListener("click", async () => {
 
-        if (started) return;
+        if(started) return;
         started = true;
 
-        music.volume = 0.7;
-
-        try {
+        try{
+            music.volume = 0.7;
             await music.play();
-        } catch (e) {
-            console.log("Music autoplay blocked.");
+        }catch(e){
+            console.log(e);
         }
 
         currentPage = 1;
         showPage(currentPage);
 
-        hearts = setInterval(createHeart, 350);
+        createHearts();
 
-        slideshow = setInterval(nextPage, 7000);
-    });
-
-    document.addEventListener("keydown", e => {
-
-        if (!started) return;
-
-        if (e.key === "ArrowRight") {
-            nextPage();
-        }
-
-        if (e.key === "ArrowLeft" && currentPage > 1) {
-            currentPage--;
-            showPage(currentPage);
-        }
-
-    });
-
-    document.addEventListener("visibilitychange", () => {
-
-        if (document.hidden) {
-
-            clearInterval(slideshow);
-
-        } else if (started && currentPage < pages.length - 1) {
-
-            slideshow = setInterval(nextPage, 7000);
-
-        }
+        slideshow = setInterval(nextPage,7000);
 
     });
 
