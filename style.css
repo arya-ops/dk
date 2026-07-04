@@ -181,17 +181,20 @@ button:hover{
 
 .letter{
 
-    background:#FFF9F2;
+   .letter-page{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
 
-    width:90%;
+    overflow-y: auto;
 
-    max-width:420px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
 
-    padding:30px;
-
-    border-radius:20px;
-
-    box-shadow:0 15px 35px rgba(0,0,0,.15);
+    padding: 40px 20px;
+}
 
 }
 
